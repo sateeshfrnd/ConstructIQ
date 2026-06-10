@@ -1,21 +1,24 @@
 import streamlit as st
 
-PAGES = [
-    "Dashboard",
-    "Cement",
-    "Steel", 
-    "Bricks",
-    "Sand",
-    "Stone",
-    "Labour",
-    "Electric Labour",      
-    "Plumbing",
-    "Paint",
-    "Miscellaneous",  
-    "Bulk order"
-]
-
-
+MENU = {
+    "Overview": {
+        "Project Overview": "overview",
+        "Budget vs Actual": "budget"
+    },
+    "Materials": {
+        "Cement & Concrete": "cement",
+        "Steel & Reinforcement": "steel",
+        "Brickwork": "bricks",
+        "Sand Supply": "sand",
+        "Aggregates & Stone": "stone"
+    },
+    "Workforce": {
+        "General Labour": "labour",
+        "Electrical Work": "electrical",
+        "Plumbing Work": "plumbing",
+        "Painting & Finishing": "paint"
+    }
+}
 
 # Function to load CSS
 def load_css(file_name):
@@ -44,11 +47,13 @@ def render_sidebar():
     )    
 
     st.sidebar.divider()
+   
+    for section, items in MENU.items():
+        with st.sidebar.expander(section, expanded=(section == "📊 Overview")):
+            for item, key in items.items():
+                if st.button(item, use_container_width=True):
+                    st.session_state.menu = key
 
-    for page in PAGES:
-        if st.sidebar.button(page, use_container_width=True):
-            st.session_state.menu = page    
-    
     st.sidebar.divider()
 
     # Logout
