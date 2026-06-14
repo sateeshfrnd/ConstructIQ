@@ -8,7 +8,7 @@ from utils.constants import (
     DATE_FORMAT,
     PAYMENT_MODES
 )
-
+from services.api_client import add_cement_expenses_entry
 def cement_entry_form():
     with st.container(border=True):
         st.subheader("Add Cement Expense")
@@ -53,21 +53,22 @@ def cement_entry_form():
                 st.error("⚠️ Payment Amount must be greater than 0")
                 return None        
             else:                
-                site_expenses_entry =  {
-                    "entry_date": str(entry_date),
+                cement_expenses_entry =  {
+                    "delivery_date": str(entry_date),
                     "construction_stage": construction_stage,
                     "vendor_name":vendor_name,
                     "cement_company_name" : cement_company_name,
                     "price_per_bag" : price_per_bag,
                     "no_of_bags": int(no_of_bags),
                     "driver_amount": driver_amount,
+                    "total_amount": total_amount,
                     "payment_amount":payment_amount,
                     "payment_mode": payment_mode,
-                    "paid_date":str(paid_date),
+                    "payment_date":str(paid_date),
                 }
-                st.success(str(site_expenses_entry))
-
-
+                st.write(cement_expenses_entry)
+                add_cement_expenses_entry(cement_expenses_entry)
+                
 
 def render_cement():
     st.title("Cement Management")
