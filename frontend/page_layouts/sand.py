@@ -6,6 +6,7 @@ from utils.constants import (
     SAND_TYPES_COST,
     DATE_FORMAT
 )
+from services.api_client import add_sand_expenses_entry
 
 def render_add_sand_entry_form():
     with st.container(border=True):
@@ -23,7 +24,7 @@ def render_add_sand_entry_form():
             driver_payment = st.radio("Driver Payment", ["No", "Yes"], horizontal=True, key="sand_driver_payment")
                 
         with col2:
-            stage = st.selectbox("Construction Stage", CONSTRUCTION_STAGES, key="sand_construction_stage")
+            construction_stage = st.selectbox("Construction Stage", CONSTRUCTION_STAGES, key="sand_construction_stage")
             no_of_trucks = st.number_input("Number of Trucks", min_value=0.0, key="sand_no_of_trucks", step=1.0)
             vendor_name = st.text_input("Vendor Name", value=DEFAULT_SAND_VENDOR, key="sand_vendor_name")
             if driver_payment == "Yes":
@@ -52,19 +53,20 @@ def render_add_sand_entry_form():
                 st.error("⚠️ number of trucks must be greater than 0")
             else:
                 sand_entry ={
-                    "delivered_date" : str(date),
-                    "construction_stage": stage,
+                    "delivery_date" : str(date),
+                    "construction_stage": construction_stage,
                     "sand_type": sand_type,
                     "vendor_name":vendor_name,
                     "cost_per_truck" : cost_per_truck,
                     "no_of_trucks": int(no_of_trucks),
                     "driver_amount": driver_amount,
                     "total_amount": total_amount,
-                    "paid_date": str(paid_date),
+                    "payment_date": str(paid_date),
                     "payment_amount":payment_amount,
                     "payment_mode": payment_mode,                    
                 } 
                 st.write(sand_entry) 
+                add_sand_expenses_entry(sand_entry)
 
 
 def render_sand():
