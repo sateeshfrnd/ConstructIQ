@@ -13,7 +13,7 @@ CONSTRUCTION_STAGES = [
     "Others"
 ]
 
-PAYMENT_MODES = ["Cash", "UPI", "Bank Transfer"]
+PAYMENT_MODES = ["Cash", "UPI", "Bank Transfer",]
 
 # CEMENT
 DEFAULT_CEMENT_VENDOR = "CHOWDESHWARI STEEL & CEMENT TRADERS"
@@ -48,4 +48,39 @@ SAND_TYPES_COST = {"DOUBLE_WASHED" : 18000.00, "SINGLE_WASHED": 16500.00}
 DEFAULT_STONE_VENDOR = "VISWANATHA SAND SUPPLIERS"
 STONES_TYPES_COST = {"20mm" : 12500.00, "40mm": 15000.00}
 
+# LABOUR
+LABOUR_TYPE = ["Steel Bending", "Civil", "Concrete Gang", "Others"]
 
+# ELECTRIC
+ELECTRIC_CATEGORY = ["Wiring", "Fittings", "Temporary EB", "Labor", "Other"]
+
+# PLUMBING
+PLUMBING_CATEGORY = ["Pipes", "Fittings", "Sanitary", "Labor", "Water Tank", "Other"]
+
+# PAINTING
+PAINTING_CATEGORY = ["Paint", "Primer", "Putty", "Labor", "Tools", "Other"]
+
+# MISCELLANEOUS_EXPENSE
+MISCELLANEOUS_EXPENSE_CATEGORIES = {
+        "Architect Fee": [
+            "Design Consultation", "Blueprint / Drawings", "Site Visits", "Approval Charges", "Other"
+        ],
+        "Excavation": [
+            "JCB / Machine Rent", "Manual Labour", "Soil Removal", "Transport", "Other"
+        ],
+        "Readymix Concrete": [
+            "RMC Material", "Pumping Charges", "Transport", "Labour Support", "Other"
+        ],
+        "House Plan": [
+            "2D Plan", "3D Elevation", "Structural Design", "Government Approval", "Other"
+        ],
+        "Site Cleaning Setup": [
+            "Initial Cleaning", "Debris Removal", "Temporary Setup", "Water Arrangement", "Other"
+        ],
+        "Loan Process": [
+            "Processing Fee", "Legal Charges", "Documentation", "Valuation Charges", "Other"
+        ],
+        "Miscellaneous": [
+            "Small Purchases", "Unexpected Expenses", "Repairs", "Tips / Support Payments", "Other"
+        ]
+    }

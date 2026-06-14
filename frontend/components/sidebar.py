@@ -16,7 +16,10 @@ MENU = {
         "General Labour": "labour",
         "Electrical Work": "electrical",
         "Plumbing Work": "plumbing",
-        "Painting & Finishing": "paint"
+        "Painting & Finishing": "painting"
+    },
+    "Other Expenses" : {
+        "Site Expenses": "site_expenses",
     }
 }
 

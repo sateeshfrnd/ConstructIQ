@@ -8,6 +8,11 @@ from page_layouts.bricks import render_bricks
 from page_layouts.steel import render_steel
 from page_layouts.sand import render_sand
 from page_layouts.stone import render_stone
+from page_layouts.labour import render_labour
+from page_layouts.electric import render_electric_expenses
+from page_layouts.plumbing import render_plumbing_expenses
+from page_layouts.painting import render_painting_expenses
+from page_layouts.site_expenses import render_site_expenses
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
@@ -40,3 +45,18 @@ elif menu == "sand":
 
 elif menu == "stone":
     render_stone()
+
+elif menu == "labour":
+    render_labour()
+
+elif menu == "electrical":
+    render_electric_expenses()
+
+elif menu == "plumbing":
+    render_plumbing_expenses()
+
+elif menu == "painting":
+    render_painting_expenses()
+
+elif menu == "site_expenses":
+    render_site_expenses()
