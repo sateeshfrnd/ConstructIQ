@@ -7,6 +7,7 @@ from utils.constants import (
     BRICK_SIZE_COST,
     DATE_FORMAT
 )
+from services.api_client import add_bricks_expenses_entry
 
 def render_add_bricks_entry_form():
     with st.container(border=True):
@@ -22,7 +23,7 @@ def render_add_bricks_entry_form():
             
 
         with col2:            
-            stage = st.selectbox("Construction Stage", CONSTRUCTION_STAGES) 
+            construction_stage = st.selectbox("Construction Stage", CONSTRUCTION_STAGES) 
             # Safe lookup with fallback to the first defined cost
             default_price = float(next(iter(BRICK_SIZE_COST.values())))
             price_per_brick = st.number_input(
@@ -66,18 +67,19 @@ def render_add_bricks_entry_form():
             else :
                 bricks_entry = {
                           "purchase_date" : str(purchase_date),
-                          "construction_stage": stage,
+                          "construction_stage": construction_stage,
                           "vendor_name":vendor_name,
+                          "brick_size":brick_type,
                           "quantity":no_of_blocks,
                           "price_per_brick" : price_per_brick,
                           "driver_amount": driver_amount,
                           "total_amount":total_cost,
                           "payment_amount":payment_amount,
                           "payment_mode": payment_mode,
-                          "paid_date":str(paid_date),
+                          "payment_date":str(paid_date),
                 }
                 st.write(bricks_entry)      
-            #st.success("Brick expense added successfully!")
+                add_bricks_expenses_entry(bricks_entry)
 
 def render_bricks():
     st.title("🧱 Brick Management")
