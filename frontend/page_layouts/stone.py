@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import date
 from utils.constants import (
     CONSTRUCTION_STAGES,
     DEFAULT_STONE_VENDOR,
@@ -12,7 +13,7 @@ def render_add_stone_entry_form():
 
         col1, col2 = st.columns(2)
         with col1:
-            date = st.date_input("Date", key="stone_date",value='today', format=DATE_FORMAT)
+            delivered_date = st.date_input("Date", key="stone_date",value='today', format=DATE_FORMAT)
             stone_type = st.selectbox("Stone Type", list(STONES_TYPES_COST.keys()))
             vendor_name = st.text_input("Vendor Name", value=DEFAULT_STONE_VENDOR, key="stone_vendor_name")
             driver_payment = st.radio("Driver Payment", ["No", "Yes"], horizontal=True, key="stone_driver_payment")
@@ -22,23 +23,51 @@ def render_add_stone_entry_form():
             cost_per_truck = st.number_input("Cost Per Truck", value=STONES_TYPES_COST[stone_type], step=100.00)
             no_of_trucks = st.number_input("Number of Trucks", min_value=0.0, key="stone_no_of_trucks", step=1.0)
             if driver_payment == "Yes":
-                driver_cost = st.number_input("Driver Amount", min_value=50, step=50)
+                driver_amount = st.number_input("Driver Amount", min_value=50, step=50)
             else :
-                driver_cost = st.number_input("Driver Amount", value=0, disabled=True)
+                driver_amount = st.number_input("Driver Amount", value=0, disabled=True)
 
         # Total Amount Calculation        
-        total_amount = (no_of_trucks * cost_per_truck) + driver_cost
+        total_amount = (no_of_trucks * cost_per_truck) + driver_amount
         st.metric("Total Amount ", f"₹{total_amount:,.2f}")   
 
         # 
         col6, col7 = st.columns(2)
         with col6:
-            payment_mode = st.selectbox("Payment Mode", ["Cash", "Bank Transfer", "UPI"], key="stone_payment_mode")
+            paid_date = st.date_input("Payment Date", key="paid_date",value=date.today(), format=DATE_FORMAT)
+            payment_mode = st.selectbox("Payment Mode", ["Cash", "Bank Transfer", "UPI"], key="sand_payment_mode")
         with col7:
             payment_amount = st.number_input("Payment Amount", min_value=0.0, value=total_amount)
 
+
         if st.button("Add Stone Entry"):
-            st.success("Stone entry added!")
+            if not vendor_name.strip():
+                st.error("⚠️ Vendor name is required")
+            elif cost_per_truck<=0:
+                st.error(" cost_per_truck is required greater than 0")
+            elif no_of_trucks<=0:
+                st.error("no_of_truck is required greater than 0")    
+            elif driver_payment == "Yes" and driver_amount <= 0:
+                st.error("⚠️ Driver amount must be greater than 0")
+            elif payment_amount <= 0:
+                st.error("⚠️ Payment Amount must be greater than 0")
+                return None
+            else:
+                stone_entry={  
+                "delivered_date": str(delivered_date),
+                "construction_stage": stage ,
+                "stone_type":stone_type,
+                "cost_per_truck":cost_per_truck,
+                "vendor_name":vendor_name,
+                "cost_per_truck":cost_per_truck,
+                "no_of_trucks":no_of_trucks,
+                "driver_amount": driver_amount,
+                "total_amount":total_amount,
+                "paid_date": str(paid_date),
+                "payment_amount":payment_amount,
+                "payment_mode": payment_mode,    
+                }
+                st.write(stone_entry) 
 
 def render_stone():
     st.title("🪨 Stone (Jelly) Management")

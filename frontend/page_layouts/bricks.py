@@ -1,5 +1,5 @@
 import streamlit as st
-
+from datetime import date
 from utils.constants import (
     CONSTRUCTION_STAGES,
     DEFAULT_BRICK_VENDOR,
@@ -16,9 +16,9 @@ def render_add_bricks_entry_form():
             purchase_date = st.date_input("Date", key="purchase_date", value='today', format=DATE_FORMAT)
             # Choose a brick size (default to first available)
             brick_type = st.selectbox("Brick Size 🧱", list(BRICK_SIZE_COST.keys()), index=0, key="brick_type")
-            vendor_name = st.text_input("Vendor Name", value=DEFAULT_BRICK_VENDOR)
-            payment = st.number_input("Payment Amount", min_value=0.0)
-            paid_date = st.date_input("Payment Date", key="paid_date")
+            vendor_name = st.text_input("Vendor Name", value=DEFAULT_BRICK_VENDOR)            
+            driver_payment = st.radio("Driver Payment?", ["No", "Yes"], horizontal=True)
+
             
 
         with col2:            
@@ -32,12 +32,52 @@ def render_add_bricks_entry_form():
                 step=5.0,
             )
             no_of_blocks = st.number_input("Quantity (bricks)", min_value=0, step=5)
-            payment_mode = st.selectbox("Payment Mode", PAYMENT_MODES)
-            total_cost = price_per_brick * no_of_blocks
-            st.metric("Total Cost", f"₹{total_cost:,.2f}")
+            if driver_payment == "Yes":
+                driver_amount = st.number_input("Driver Amount", min_value=50, step=50)
+            else:
+                driver_amount = st.number_input("Driver Amount", value=0, disabled=True)
+            
+        total_cost = (price_per_brick * no_of_blocks) + driver_amount
+        st.metric("Total Cost", f"₹{total_cost:,.2f}")
+
+        col1, col2 = st.columns(2)
+        with col1:    
+            paid_date = st.date_input("Payment Date", key="paid_date",value=date.today(), format=DATE_FORMAT)       
+            payment_mode = st.selectbox("Payment Mode", PAYMENT_MODES)         
+        with col2 :            
+            payment_amount = st.number_input("Payment Amount", min_value=0.0, value=total_cost)
+
+   
+
 
         if st.button("Add Entry"):
-            st.success("Brick expense added successfully!")
+            if not vendor_name.strip():
+                st.error("⚠️ Vendor name is required")
+            elif not brick_type.strip():
+                st.error("⚠️ brick_type is required")   
+            elif price_per_brick <= 0:
+                st.error("⚠️ Price per brick  must be greater than 0")
+            elif no_of_blocks <= 0:
+                st.error("⚠️ Quantity must be greater than 0")
+            elif price_per_brick <= 0:
+                st.error("⚠️ Cost of the bag must be greater than 0")
+            elif driver_payment == "Yes" and driver_amount <= 0:
+                st.error("⚠️ Driver amount must be greater than 0")
+            else :
+                bricks_entry = {
+                          "purchase_date" : str(purchase_date),
+                          "construction_stage": stage,
+                          "vendor_name":vendor_name,
+                          "quantity":no_of_blocks,
+                          "price_per_brick" : price_per_brick,
+                          "driver_amount": driver_amount,
+                          "total_amount":total_cost,
+                          "payment_amount":payment_amount,
+                          "payment_mode": payment_mode,
+                          "paid_date":str(paid_date),
+                }
+                st.write(bricks_entry)      
+            #st.success("Brick expense added successfully!")
 
 def render_bricks():
     st.title("🧱 Brick Management")

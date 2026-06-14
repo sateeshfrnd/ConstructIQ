@@ -1,10 +1,12 @@
 import streamlit as st
+from datetime import date
 from utils.constants import (
     CONSTRUCTION_STAGES, 
     DEFAULT_CEMENT_VENDOR, 
     DEFAULT_CEMENT_COMPANY, 
     DEFAULT_CEMENT_COST_PER_BAG,
-    DATE_FORMAT
+    DATE_FORMAT,
+    PAYMENT_MODES
 )
 
 def cement_entry_form():
@@ -12,26 +14,60 @@ def cement_entry_form():
         st.subheader("Add Cement Expense")
         col1, col2 = st.columns(2)
         with col1:
-            purchase_date = st.date_input("Date", key="purchase_date", value='today', format=DATE_FORMAT)            
+            entry_date = st.date_input("Date", key="purchase_date", value=date.today(), format=DATE_FORMAT)
             vendor_name = st.text_input("Vendor Name", value=DEFAULT_CEMENT_VENDOR)
-            cost_per_bag = st.number_input("Price Per Bag", value=DEFAULT_CEMENT_COST_PER_BAG, step=5.00)
+            price_per_bag = st.number_input("Price Per Bag", value=DEFAULT_CEMENT_COST_PER_BAG, step=5.00)
             driver_payment = st.radio("Driver Payment?", ["No", "Yes"], horizontal=True)
-            
-
         with col2:            
-            stage = st.selectbox("Construction Stage", CONSTRUCTION_STAGES) 
-            company_name = st.text_input("Cement Company", value=DEFAULT_CEMENT_COMPANY)
+            construction_stage = st.selectbox("Construction Stage", CONSTRUCTION_STAGES) 
+            cement_company_name = st.text_input("Cement Company", value=DEFAULT_CEMENT_COMPANY)
             no_of_bags = st.number_input("Quantity (bags)", min_value=0, step=5)
             if driver_payment == "Yes":
-                amount = st.number_input("Driver Amount", min_value=50, step=50)
-            else :
-                amount = st.number_input("Driver Amount", value=0, disabled=True)
+                driver_amount = st.number_input("Driver Amount", min_value=50, step=50)
+            else:
+                driver_amount = st.number_input("Driver Amount", value=0, disabled=True)
 
-        total_amount = (cost_per_bag * no_of_bags) + amount
+           
+        total_amount = (price_per_bag * no_of_bags) + driver_amount
         st.metric("Total Amount",  f"₹{total_amount:,.2f}")
 
+        col1, col2 = st.columns(2)
+        with col1:
+            payment_amount = st.number_input("Payment Amount", min_value=0.0, value=total_amount)
+            paid_date = st.date_input("Payment Date", key="paid_date",value=date.today(), format=DATE_FORMAT)
+        with col2 :
+            payment_mode = st.selectbox("Payment Mode", PAYMENT_MODES)
+
         if st.button("Add Entry"):
-            st.success("Brick expense added successfully!")
+            if not vendor_name.strip():
+                st.error("⚠️ Vendor name is required")
+            elif not cement_company_name.strip():
+                st.error("⚠️ Vendor name is required")
+            elif price_per_bag <= 0:
+                st.error("⚠️ Cost of the bag must be greater than 0")
+            elif no_of_bags <= 0:
+                st.error("⚠️ Number of the bag must be greater than 0")
+            elif driver_payment == "Yes" and driver_amount <= 0:
+                st.error("⚠️ Driver amount must be greater than 0")
+            elif payment_amount <= 0:
+                st.error("⚠️ Payment Amount must be greater than 0")
+                return None        
+            else:                
+                site_expenses_entry =  {
+                    "entry_date": str(entry_date),
+                    "construction_stage": construction_stage,
+                    "vendor_name":vendor_name,
+                    "cement_company_name" : cement_company_name,
+                    "price_per_bag" : price_per_bag,
+                    "no_of_bags": int(no_of_bags),
+                    "driver_amount": driver_amount,
+                    "payment_amount":payment_amount,
+                    "payment_mode": payment_mode,
+                    "paid_date":str(paid_date),
+                }
+                st.success(str(site_expenses_entry))
+
+
 
 def render_cement():
     st.title("Cement Management")

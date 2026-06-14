@@ -4,6 +4,7 @@ from utils.constants import (
     CONSTRUCTION_STAGES,
     DEFAULT_SAND_VENDOR,
     SAND_TYPES_COST,
+    DATE_FORMAT
 )
 
 def render_add_sand_entry_form():
@@ -26,23 +27,44 @@ def render_add_sand_entry_form():
             no_of_trucks = st.number_input("Number of Trucks", min_value=0.0, key="sand_no_of_trucks", step=1.0)
             vendor_name = st.text_input("Vendor Name", value=DEFAULT_SAND_VENDOR, key="sand_vendor_name")
             if driver_payment == "Yes":
-                driver_cost = st.number_input("Driver Amount", min_value=50, step=50)
+                driver_amount = st.number_input("Driver Amount", min_value=50, step=50)
             else :
-                driver_cost = st.number_input("Driver Amount", value=0, disabled=True)
+                driver_amount = st.number_input("Driver Amount", value=0, disabled=True)
 
         # Total Amount Calculation        
-        total_amount = (no_of_trucks * cost_per_truck) + driver_cost
+        total_amount = (no_of_trucks * cost_per_truck) + driver_amount
         st.metric("Total Amount ", f"₹{total_amount:,.2f}")  
 
         col6, col7 = st.columns(2)
         with col6:
+            paid_date = st.date_input("Payment Date", key="paid_date",value=date.today(), format=DATE_FORMAT)
             payment_mode = st.selectbox("Payment Mode", ["Cash", "Bank Transfer", "UPI"], key="sand_payment_mode")
         with col7:
             payment_amount = st.number_input("Payment Amount", min_value=0.0, value=total_amount)
 
         
         if st.button("Add Sand Entry"):
-            st.success("Sand entry added!") 
+            if not sand_type.strip():
+                st.error("⚠️ sand type is required")
+            elif not vendor_name.strip():
+                st.error("⚠️ Vendor name is required")    
+            elif no_of_trucks<= 0:
+                st.error("⚠️ number of trucks must be greater than 0")
+            else:
+                sand_entry ={
+                    "delivered_date" : str(date),
+                    "construction_stage": stage,
+                    "sand_type": sand_type,
+                    "vendor_name":vendor_name,
+                    "cost_per_truck" : cost_per_truck,
+                    "no_of_trucks": int(no_of_trucks),
+                    "driver_amount": driver_amount,
+                    "total_amount": total_amount,
+                    "paid_date": str(paid_date),
+                    "payment_amount":payment_amount,
+                    "payment_mode": payment_mode,                    
+                } 
+                st.write(sand_entry) 
 
 
 def render_sand():
