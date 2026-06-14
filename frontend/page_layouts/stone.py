@@ -7,21 +7,22 @@ from utils.constants import (
     DATE_FORMAT
 )
 
+from services.api_client import add_stone_expenses_entry
 def render_add_stone_entry_form():
     with st.container(border=True):
         st.subheader("Add Stone Purchase")
 
         col1, col2 = st.columns(2)
         with col1:
-            delivered_date = st.date_input("Date", key="stone_date",value='today', format=DATE_FORMAT)
+            delivery_date = st.date_input("Date", key="stone_date", value=date.today(), format=DATE_FORMAT)
             stone_type = st.selectbox("Stone Type", list(STONES_TYPES_COST.keys()))
             vendor_name = st.text_input("Vendor Name", value=DEFAULT_STONE_VENDOR, key="stone_vendor_name")
             driver_payment = st.radio("Driver Payment", ["No", "Yes"], horizontal=True, key="stone_driver_payment")
                 
         with col2:
-            stage = st.selectbox("Construction Stage", CONSTRUCTION_STAGES, key="stone_construction_stage")
+            construction_stage = st.selectbox("Construction Stage", CONSTRUCTION_STAGES, key="stone_construction_stage")
             cost_per_truck = st.number_input("Cost Per Truck", value=STONES_TYPES_COST[stone_type], step=100.00)
-            no_of_trucks = st.number_input("Number of Trucks", min_value=0.0, key="stone_no_of_trucks", step=1.0)
+            no_of_trucks = st.number_input("Number of Trucks", min_value=0, key="stone_no_of_trucks", step=1)
             if driver_payment == "Yes":
                 driver_amount = st.number_input("Driver Amount", min_value=50, step=50)
             else :
@@ -54,20 +55,24 @@ def render_add_stone_entry_form():
                 return None
             else:
                 stone_entry={  
-                "delivered_date": str(delivered_date),
-                "construction_stage": stage ,
+                "delivery_date": str(delivery_date),
+                "construction_stage": construction_stage ,
                 "stone_type":stone_type,
                 "cost_per_truck":cost_per_truck,
                 "vendor_name":vendor_name,
-                "cost_per_truck":cost_per_truck,
-                "no_of_trucks":no_of_trucks,
+                "no_of_trucks": int(no_of_trucks),
                 "driver_amount": driver_amount,
                 "total_amount":total_amount,
-                "paid_date": str(paid_date),
                 "payment_amount":payment_amount,
-                "payment_mode": payment_mode,    
+                "payment_mode": payment_mode, 
+                "payment_date": str(paid_date),   
                 }
-                st.write(stone_entry) 
+                st.write(stone_entry)
+                result = add_stone_expenses_entry(stone_entry)
+                if isinstance(result, dict) and result.get("error"):
+                    st.error(result["error"])
+                else:
+                    st.success("Stone entry submitted successfully")
 
 def render_stone():
     st.title("🪨 Stone (Jelly) Management")
