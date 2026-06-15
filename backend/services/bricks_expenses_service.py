@@ -18,3 +18,6 @@ def add_bricks_expenses_service(db, request):
     db.commit()
     db.refresh(new_expense)
     return new_expense
+
+def get_bricks_expenses_service(db):
+    return db.query(Bricks_Expenses).all()

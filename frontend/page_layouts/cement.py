@@ -1,5 +1,6 @@
 import streamlit as st
 from datetime import date
+import pandas as pd
 from utils.constants import (
     CONSTRUCTION_STAGES, 
     DEFAULT_CEMENT_VENDOR, 
@@ -8,7 +9,9 @@ from utils.constants import (
     DATE_FORMAT,
     PAYMENT_MODES
 )
-from services.api_client import add_cement_expenses_entry
+from services.api_client import (
+add_cement_expenses_entry,get_cement_expenses_entry)
+
 def cement_entry_form():
     with st.container(border=True):
         st.subheader("Add Cement Expense")
@@ -68,7 +71,15 @@ def cement_entry_form():
                 }
                 st.write(cement_expenses_entry)
                 add_cement_expenses_entry(cement_expenses_entry)
-                
+ 
+def render_expenses_history():
+    st.subheader("Expense History") 
+    data = get_cement_expenses_entry()
+    if data:
+        df = pd.DataFrame(data=data)
+        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+    else:
+        st.info("No expenses added yet.")             
 
 def render_cement():
     st.title("Cement Management")
@@ -78,5 +89,4 @@ def render_cement():
     cement_entry_form()   
     st.divider()
     # Expense history table (placeholder for now)
-    st.subheader("Expense History") 
-    st.info("No records yet ")
+    render_expenses_history()

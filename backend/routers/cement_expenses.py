@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database.db import get_db
 from schemas.cement_expenses_schema import CementExpenses
-from services.cement_expenses_service import add_cement_expenses_service
+from services.cement_expenses_service import (
+    add_cement_expenses_service,get_cement_expenses_service)
 
 router = APIRouter(prefix="/cement_expenses", tags=["cement_expenses"])
 
@@ -13,3 +14,9 @@ def add_steel_expenses(
 ):
     print(f'Router:add_cement_expenses={request}')
     return add_cement_expenses_service(db, request)
+
+@router.get("/")
+def get_cement_expenses(
+     db : Session = Depends(get_db)
+):
+    return get_cement_expenses_service(db=db)

@@ -16,6 +16,9 @@ def add_electric_expenses_service(db, request):
     db.refresh(new_expense)
     return new_expense
 
+def get_electric_expenses_service(db):
+    return db.query(Electric_Expenses).all()
+
 
 
 

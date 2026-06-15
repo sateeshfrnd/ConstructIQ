@@ -73,4 +73,3 @@ def render_labour():
     st.divider()
     # Expense history table (placeholder for now)
     render_expenses_history()
-    

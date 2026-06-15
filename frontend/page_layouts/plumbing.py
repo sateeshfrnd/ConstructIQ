@@ -1,5 +1,6 @@
 import streamlit as st
-from datetime import date
+from datetime import date 
+import pandas as pd
 
 from utils.constants import (
     DATE_FORMAT,
@@ -7,7 +8,7 @@ from utils.constants import (
     PAYMENT_MODES,
     PLUMBING_CATEGORY
 )
-from services.api_client import add_plumbing_expenses_entry
+from services.api_client import add_plumbing_expenses_entry,get_plumbing_expenses_entry  
 def render_plumbing_entry_form():
     with st.form("plumbing_form", clear_on_submit=True):
         st.subheader("Add Plumbing Expense")
@@ -43,12 +44,20 @@ def render_plumbing_entry_form():
             st.write(plumbing_expenses_entry)
             add_plumbing_expenses_entry(plumbing_expenses_entry)
 
+def render_expenses_history():
+        st.subheader("Expense History") 
+        data = get_plumbing_expenses_entry()
+        if data:
+            df = pd.DataFrame(data=data)
+            st.dataframe(data=df, use_container_width=True,  hide_index=True)
+        else:
+            st.info("No expenses added yet.") 
 
 def render_plumbing_expenses():
     st.title("🚿 Plumbing Expenses")
     st.caption(
         "Track and manage plumbing expenses during construction. "
-        "Record costs for pipes, fittings, sanitary items, and labor."
+      "Record costs for pipes, fittings, sanitary items, and labor."
     )
     
     # Add Labour Entry Form
@@ -56,6 +65,5 @@ def render_plumbing_expenses():
 
     st.divider()
     # Expense history table (placeholder for now)
-    st.subheader("Expense History") 
-    st.info("No records yet ")
+    render_expenses_history()
 

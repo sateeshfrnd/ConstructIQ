@@ -17,5 +17,6 @@ def add_plumbing_expenses_service(db, request):
     return new_expense
 
 
-
+def get_plumbing_expenses_service(db):
+    return db.query(Plumbing_Expenses).all()
 

@@ -6,6 +6,7 @@ def add_sand_expenses_service(db, request):
         delivery_date = request.delivery_date,
         construction_stage = request.construction_stage,
         vendor_name = request.vendor_name,        
+        sand_type = request.sand_type,
         cost_per_truck = request.cost_per_truck,
         no_of_trucks = request.no_of_trucks,
         driver_amount = request.driver_amount,
@@ -18,3 +19,6 @@ def add_sand_expenses_service(db, request):
     db.commit()
     db.refresh(new_expense)
     return new_expense
+
+def get_sand_expenses_service(db):
+    return db.query(Sand_Expenses).all()

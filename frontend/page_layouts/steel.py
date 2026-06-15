@@ -1,5 +1,7 @@
 import streamlit as st
 from datetime import date
+import pandas as pd
+
 from utils.constants import (
     CONSTRUCTION_STAGES,
     DEFAULT_STEEL_VENDOR,
@@ -10,7 +12,8 @@ from utils.constants import (
     DEFAULT_BINDING_WIRE_COST_PER_BUNDLE,
     DATE_FORMAT,
 )
-from services.api_client import add_steel_expenses_entry
+from services.api_client import (
+    add_steel_expenses_entry,get_steel_expenses_entry)
 def render_add_steel_entry_form():
     with st.container(border=True):
         st.subheader("Add Steel Purchase")
@@ -113,7 +116,16 @@ def render_add_steel_entry_form():
                 } 
                 st.write(steel_bundle_entry) 
                 add_steel_expenses_entry(steel_bundle_entry)
-            
+
+def render_expenses_history():
+    st.subheader("Expense History") 
+    data = get_steel_expenses_entry()
+    if data:
+        df = pd.DataFrame(data=data)
+        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+    else:
+        st.info("No expenses added yet.")  
+
 def render_steel():
     st.title("Steel & Reinforcement Management")
     st.write("Track and manage your steel inventory with precision. Monitor procurement, usage across activities, and keep control of material costs.")
@@ -121,5 +133,4 @@ def render_steel():
     render_add_steel_entry_form()
     st.divider()
     # 📜 Expense History
-    st.subheader("Purchase History")
-    st.info("No records yet ")
+    render_expenses_history()

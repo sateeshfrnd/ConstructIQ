@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database.db import get_db
 from schemas.sand_expenses_schema import SandExpenses
-from services.sand_expenses_service import add_sand_expenses_service
+from services.sand_expenses_service import (
+    add_sand_expenses_service,get_sand_expenses_service)
 
 router = APIRouter(prefix="/sand_expenses", tags=["sand_expenses"])
 
@@ -13,3 +14,9 @@ def add_send_expenses(
 ):
     print(f'Router:add_sand_expenses={request}')
     return add_sand_expenses_service(db, request)
+
+@router.get("/")
+def get_sand_expenses(
+     db : Session = Depends(get_db)
+):
+    return get_sand_expenses_service(db=db)

@@ -17,5 +17,6 @@ def add_painting_expenses_service(db, request):
     return new_expense
 
 
-
+def get_painting_expenses_service(db):
+    return db.query(Painting_Expenses).all()
 

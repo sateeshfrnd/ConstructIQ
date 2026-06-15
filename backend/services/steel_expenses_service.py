@@ -21,3 +21,6 @@ def add_steel_expenses_service(db, request):
     db.commit()
     db.refresh(new_expense)
     return new_expense
+
+def get_steel_expenses_service(db):
+    return db.query(Steel_Expenses).all()

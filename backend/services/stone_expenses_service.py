@@ -5,7 +5,8 @@ def add_stone_expenses_service(db, request):
     new_expense = Stone_Expenses(
         delivery_date = request.delivery_date,
         construction_stage = request.construction_stage,
-        vendor_name = request.vendor_name,        
+        vendor_name = request.vendor_name,    
+        stone_type = request.stone_type,    
         cost_per_trucks = request.cost_per_truck,
         num_of_trucks = request.no_of_trucks,
         driver_amount = request.driver_amount,
@@ -18,3 +19,6 @@ def add_stone_expenses_service(db, request):
     db.commit()
     db.refresh(new_expense)
     return new_expense
+
+def get_stone_expenses_service(db):
+    return db.query(Stone_Expenses).all()

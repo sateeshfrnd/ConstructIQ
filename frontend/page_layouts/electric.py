@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from datetime import date
 
 from utils.constants import (
@@ -7,7 +8,7 @@ from utils.constants import (
     PAYMENT_MODES,
     ELECTRIC_CATEGORY
 )
-from services.api_client import add_electric_expenses_entry
+from services.api_client import add_electric_expenses_entry,get_electric_expenses_entry
 
 def render_electric_entry_form():
     # with st.form("electric_form", clear_on_submit=True):
@@ -47,6 +48,15 @@ def render_electric_entry_form():
                 st.write(electric_expenses_entry)
                 add_electric_expenses_entry(electric_expenses_entry)
 
+def render_expenses_history():
+    st.subheader("Expense History") 
+    data = get_electric_expenses_entry()
+    if data:
+        df = pd.DataFrame(data=data)
+        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+    else:
+        st.info("No expenses added yet.")
+
              
    
 
@@ -59,6 +69,5 @@ def render_electric_expenses():
 
     st.divider()
     # Expense history table (placeholder for now)
-    st.subheader("Expense History") 
-    st.info("No records yet ")
-
+   
+    render_expenses_history()

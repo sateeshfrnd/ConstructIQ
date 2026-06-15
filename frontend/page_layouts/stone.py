@@ -1,5 +1,6 @@
 import streamlit as st
 from datetime import date
+import pandas as pd
 from utils.constants import (
     CONSTRUCTION_STAGES,
     DEFAULT_STONE_VENDOR,
@@ -7,7 +8,9 @@ from utils.constants import (
     DATE_FORMAT
 )
 
-from services.api_client import add_stone_expenses_entry
+from services.api_client import (
+    add_stone_expenses_entry,get_stone_expenses_entry)
+
 def render_add_stone_entry_form():
     with st.container(border=True):
         st.subheader("Add Stone Purchase")
@@ -74,6 +77,15 @@ def render_add_stone_entry_form():
                 else:
                     st.success("Stone entry submitted successfully")
 
+def render_expenses_history():
+    st.subheader("Expense History") 
+    data = get_stone_expenses_entry()
+    if data:
+        df = pd.DataFrame(data=data)
+        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+    else:
+        st.info("No expenses added yet.")
+
 def render_stone():
     st.title("🪨 Stone (Jelly) Management")
     st.write("Track and manage your stone materials efficiently. Keep records of purchases, usage in construction, and maintain clear visibility of stock levels.")
@@ -81,9 +93,9 @@ def render_stone():
     render_add_stone_entry_form()
 
     st.divider()
-    #  Expense History
-    st.subheader("Purchase History")
-    st.info("No records yet")
+    # Expense history table (placeholder for now)
+   
+    render_expenses_history()
 
     
 

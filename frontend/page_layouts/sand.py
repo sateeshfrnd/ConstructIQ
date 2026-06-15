@@ -1,4 +1,5 @@
-import streamlit as st
+import streamlit as st 
+import pandas as pd
 
 from utils.constants import (
     CONSTRUCTION_STAGES,
@@ -6,7 +7,8 @@ from utils.constants import (
     SAND_TYPES_COST,
     DATE_FORMAT
 )
-from services.api_client import add_sand_expenses_entry
+from services.api_client import (
+    add_sand_expenses_entry,get_sand_expenses_entry)
 
 def render_add_sand_entry_form():
     with st.container(border=True):
@@ -68,6 +70,14 @@ def render_add_sand_entry_form():
                 st.write(sand_entry) 
                 add_sand_expenses_entry(sand_entry)
 
+def render_expenses_history():
+    st.subheader("Expense History") 
+    data = get_sand_expenses_entry()
+    if data:
+        df = pd.DataFrame(data=data)
+        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+    else:
+        st.info("No expenses added yet.")
 
 def render_sand():
     st.title("Sand Management")
@@ -75,5 +85,7 @@ def render_sand():
     render_add_sand_entry_form()
    
     #  Expense History
-    st.subheader("Purchase History")
-    st.info("No records yet")
+    st.divider()
+    # Expense history table (placeholder for now)
+   
+    render_expenses_history()

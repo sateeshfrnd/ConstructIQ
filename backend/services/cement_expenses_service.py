@@ -19,3 +19,6 @@ def add_cement_expenses_service(db, request):
     db.commit()
     db.refresh(new_expense)
     return new_expense
+
+def get_cement_expenses_service(db):
+    return db.query(Cement_Expenses).all()

@@ -1,5 +1,6 @@
 import streamlit as st
 from datetime import date
+import pandas as pd
 
 from utils.constants import (
     DATE_FORMAT,
@@ -8,7 +9,8 @@ from utils.constants import (
     MISCELLANEOUS_EXPENSE_CATEGORIES
 )
 
-from services.api_client import add_site_expenses_entry
+from services.api_client import (
+    add_site_expenses_entry,get_site_expenses_entry)
 
 def render_site_entry_form():
     with st.form("site_form", clear_on_submit=True):
@@ -51,6 +53,14 @@ def render_site_entry_form():
 
     return None
 
+def render_expenses_history():
+    st.subheader("Expense History") 
+    data = get_site_expenses_entry()
+    if data:
+        df = pd.DataFrame(data=data)
+        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+    else:
+        st.info("No expenses added yet.")
 
 def render_site_expenses():
     st.title("📦 Site Expenses Entry ")
@@ -61,6 +71,4 @@ def render_site_expenses():
 
     st.divider()
     # Expense history table (placeholder for now)
-    st.subheader("Expense History") 
-    st.info("No site expense data available")
-
+    render_expenses_history()

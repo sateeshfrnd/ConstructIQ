@@ -1,5 +1,6 @@
 import streamlit as st
 from datetime import date
+import pandas as pd
 from utils.constants import (
     CONSTRUCTION_STAGES,
     DEFAULT_BRICK_VENDOR,
@@ -7,8 +8,9 @@ from utils.constants import (
     BRICK_SIZE_COST,
     DATE_FORMAT
 )
-from services.api_client import add_bricks_expenses_entry
-
+from services.api_client import (
+    add_bricks_expenses_entry,get_bricks_expenses_entry
+)
 def render_add_bricks_entry_form():
     with st.container(border=True):
         st.subheader("Add Sand Purchase")
@@ -81,6 +83,15 @@ def render_add_bricks_entry_form():
                 st.write(bricks_entry)      
                 add_bricks_expenses_entry(bricks_entry)
 
+def render_expenses_history():
+    st.subheader("Expense History") 
+    data = get_bricks_expenses_entry()
+    if data:
+        df = pd.DataFrame(data=data)
+        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+    else:
+        st.info("No expenses added yet.")                
+
 def render_bricks():
     st.title("🧱 Brick Management")
     st.write("Track and manage your brick inventory efficiently. Record purchases, monitor usage across construction stages, and stay on top of your brick consumption.")
@@ -91,5 +102,4 @@ def render_bricks():
     st.divider()
 
     # Expense History
-    st.subheader("Expense History")
-    st.info("No records yet ")
+    render_expenses_history()
