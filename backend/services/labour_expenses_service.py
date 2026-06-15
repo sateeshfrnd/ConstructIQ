@@ -17,6 +17,11 @@ def add_labour_expenses_service(db, request):
     db.refresh(new_expense)
     return new_expense
 
+def get_labour_expenses_service(db):
+    return db.query(Labour_Expenses).all()
+
+
+
 
 
 

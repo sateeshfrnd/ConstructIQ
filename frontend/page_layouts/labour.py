@@ -8,7 +8,7 @@ from utils.constants import (
     DATE_FORMAT,
     LABOUR_TYPE
 )
-from services.api_client import add_labour_expenses_entry
+from services.api_client import add_labour_expenses_entry, get_labour_expenses_entry
 
 def render_labour_entry_form():
     with st.container(border=True):
@@ -54,7 +54,14 @@ def render_labour_entry_form():
                 st.write(labour_expenses_entry)
                 add_labour_expenses_entry(labour_expenses_entry)
 
-
+def render_expenses_history():
+    st.subheader("Expense History") 
+    data = get_labour_expenses_entry()
+    if data:
+        df = pd.DataFrame(data=data)
+        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+    else:
+        st.info("No expenses added yet.")
 
 def render_labour():
     st.title("👷 Labour Management")
@@ -65,5 +72,5 @@ def render_labour():
 
     st.divider()
     # Expense history table (placeholder for now)
-    st.subheader("Expense History") 
-    st.info("No records yet ")
+    render_expenses_history()
+    
