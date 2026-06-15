@@ -47,13 +47,19 @@ def get_sand_expenses_entry():
 
 # Stone Entry
 def add_stone_expenses_entry(entry):
-     return requests.post(f"{BASE_URL}/stone_expenses", json=entry).json()
+    response = requests.post(f"{BASE_URL}/stone_expenses", json=entry)
+    try:
+        return response.json()
+    except ValueError:
+        return {
+            "error": f"Server returned non-JSON response (status {response.status_code}): {response.text}"
+        }
 
 def get_stone_expenses_entry():
      return requests.get(f"{BASE_URL}/stone_expenses").json()
 
 # Labour Entry
-def add_laour_expenses_entry(entry):
+def add_labour_expenses_entry(entry):
      return requests.post(f"{BASE_URL}/labour_expenses", json=entry).json()
 
 def get_labour_expenses_entry():

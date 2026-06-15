@@ -7,7 +7,7 @@ from utils.constants import (
     PAYMENT_MODES,
     PAINTING_CATEGORY
 )
-
+from services.api_client import add_painting_expenses_entry
 def render_painting_entry_form():
     with st.form("painting_form", clear_on_submit=True):
         st.subheader("Add Painting Expense")
@@ -17,7 +17,7 @@ def render_painting_entry_form():
         with col1:
             expense_date = st.date_input("📅 Date", value=date.today(), format=DATE_FORMAT)
             category = st.selectbox("⚡ Category",PAINTING_CATEGORY)
-            stage = st.selectbox("🏗️ Construnction Stage",CONSTRUCTION_STAGES)
+            construction_stage = st.selectbox("🏗️ Construnction Stage",CONSTRUCTION_STAGES)
 
         with col2:
             vendor = st.text_input("👷 Painter / Vendor")
@@ -30,17 +30,17 @@ def render_painting_entry_form():
             if amount == 0:
                 st.error("Amount cannot be zero")
                 return None
-            return {
-                "date": str(expense_date),
+            painting_expense_entry={
+                "expense_date": str(expense_date),
                 "category": category,
-                "stage": stage,
+                "construction_stage": construction_stage,
                 "vendor": vendor,
                 "amount": amount,
                 "mode": mode,
                 "description": description
-            }
-
-    return None
+                }
+            st.write(painting_expense_entry)
+            add_painting_expenses_entry(painting_expense_entry)
 
 
 def render_painting_expenses():

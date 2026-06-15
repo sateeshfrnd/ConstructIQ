@@ -7,7 +7,7 @@ from utils.constants import (
     PAYMENT_MODES,
     PLUMBING_CATEGORY
 )
-
+from services.api_client import add_plumbing_expenses_entry
 def render_plumbing_entry_form():
     with st.form("plumbing_form", clear_on_submit=True):
         st.subheader("Add Plumbing Expense")
@@ -17,7 +17,7 @@ def render_plumbing_entry_form():
         with col1:
             expense_date = st.date_input("📅 Date", value=date.today(), format=DATE_FORMAT)
             category = st.selectbox("⚡ Category",PLUMBING_CATEGORY)
-            stage = st.selectbox("🏗️ Construnction Stage",CONSTRUCTION_STAGES)
+            construction_stage = st.selectbox("🏗️ Construnction Stage",CONSTRUCTION_STAGES)
 
         with col2:
             vendor = st.text_input("👷 Plumber / Vendor")
@@ -30,17 +30,18 @@ def render_plumbing_entry_form():
             if amount == 0:
                 st.error("Amount cannot be zero")
                 return None
-            return {
-                "date": str(expense_date),
+            plumbing_expenses_entry = {
+                "expense_date": str(expense_date),
                 "category": category,
-                "stage": stage,
+                "construction_stage": construction_stage,
                 "vendor": vendor,
                 "amount": amount,
-                "mode": mode,
+                "payment_mode": mode,
                 "description": description
             }
 
-    return None
+            st.write(plumbing_expenses_entry)
+            add_plumbing_expenses_entry(plumbing_expenses_entry)
 
 
 def render_plumbing_expenses():

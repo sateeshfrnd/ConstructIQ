@@ -11,5 +11,5 @@ def add_steel_expenses(
         request: SteelExpenses,
         db : Session = Depends(get_db)
 ):
-    print(f'Router:add_site_expenses={request}')
+    print(f'Router:add_steel_expenses={request}')
     return add_steel_expenses_service(db, request)

@@ -8,6 +8,8 @@ from utils.constants import (
     MISCELLANEOUS_EXPENSE_CATEGORIES
 )
 
+from services.api_client import add_site_expenses_entry
+
 def render_site_entry_form():
     with st.form("site_form", clear_on_submit=True):
         st.subheader("Add Site Expenses")
@@ -34,16 +36,18 @@ def render_site_entry_form():
             elif not description.strip():
                 st.error("⚠️ Description is required")
             else:
-                return {
-                    "date": str(expense_date),
-                    "category": category,
-                    "stage": stage,
-                    "type": expense_type,
+                site_expenses_entry =  {
+                    "expenses_date": str(expense_date),
+                    "expense_category": category,
+                    "construction_stage": stage,
+                    "expense_type": expense_type,
                     "amount": amount,
-                    "mode": mode,
+                    "payment_mode": mode,
                     "description": description,
                     "notes": notes
                 }
+                add_site_expenses_entry(site_expenses_entry)
+                return site_expenses_entry
 
     return None
 

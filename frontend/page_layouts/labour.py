@@ -8,6 +8,7 @@ from utils.constants import (
     DATE_FORMAT,
     LABOUR_TYPE
 )
+from services.api_client import add_labour_expenses_entry
 
 def render_labour_entry_form():
     with st.container(border=True):
@@ -17,7 +18,7 @@ def render_labour_entry_form():
 
         with col1:
             date = st.date_input("Payment Date", value='today', format=DATE_FORMAT)            
-            stage = st.selectbox("Construction Stage", CONSTRUCTION_STAGES, key="construction_stage")
+            construction_stage = st.selectbox("Construction Stage", CONSTRUCTION_STAGES, key="construction_stage")
             labour_type = st.selectbox("Labour Type", LABOUR_TYPE)
 
         with col2:
@@ -36,7 +37,22 @@ def render_labour_entry_form():
         st.metric("Final Amount ", f"₹{amount:,.0f}")  
 
         if st.button("Add Labour Entry"):
-            st.success("Labour entry added!")
+            if not labour_type.strip():
+                st.error("⚠️ labour type is required")
+            
+            else:
+                labour_expenses_entry ={
+                    "payment_date":str(date),
+                    "construction_stage":construction_stage,
+                    "labour_type":labour_type,
+                    "paid_to":person,
+                    "description":description,
+                    "reference":reference,
+                    "payment_amount":amount,
+                    "payment_mode":payment_mode
+                }
+                st.write(labour_expenses_entry)
+                add_labour_expenses_entry(labour_expenses_entry)
 
 
 

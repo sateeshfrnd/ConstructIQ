@@ -11,5 +11,5 @@ def add_send_expenses(
         request: SandExpenses,
         db : Session = Depends(get_db)
 ):
-    print(f'Router:add_site_expenses={request}')
+    print(f'Router:add_sand_expenses={request}')
     return add_sand_expenses_service(db, request)

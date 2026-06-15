@@ -7,9 +7,11 @@ from utils.constants import (
     PAYMENT_MODES,
     ELECTRIC_CATEGORY
 )
+from services.api_client import add_electric_expenses_entry
 
 def render_electric_entry_form():
-    with st.form("electric_form", clear_on_submit=True):
+    # with st.form("electric_form", clear_on_submit=True):
+    with st.container(border=True):
         st.subheader("Add Electric Expense")
 
         col1, col2 = st.columns(2)
@@ -17,31 +19,36 @@ def render_electric_entry_form():
         with col1:
             expense_date = st.date_input("📅 Date", value=date.today(), format=DATE_FORMAT)
             category = st.selectbox("⚡ Category",ELECTRIC_CATEGORY)
-            stage = st.selectbox("🏗️ Construnction Stage",CONSTRUCTION_STAGES)
+            construction_stage = st.selectbox("🏗️ Construnction Stage",CONSTRUCTION_STAGES)
 
         with col2:
             vendor = st.text_input("👷 Vendor / Electrician")
             amount = st.number_input("💰 Amount", min_value=0, step=500)
-            mode = st.selectbox("💳 Payment Mode", PAYMENT_MODES)
+            payment_mode = st.selectbox("💳 Payment Mode", PAYMENT_MODES)
 
         description = st.text_area("📝 Description")
-        submitted = st.form_submit_button("✅ Save Expense")
-        if submitted:
-            if amount == 0:
+        
+        if st.button("Add electric Entry"):
+            if not category.strip():
+                st.error("⚠️ category is required")
+            elif amount == 0:
                 st.error("Amount cannot be zero")
                 return None
-            return {
-                "date": str(expense_date),
+            else :
+                electric_expenses_entry={
+                "expense_date": str(expense_date),
                 "category": category,
-                "stage": stage,
+                "construction_stage": construction_stage,
                 "vendor": vendor,
                 "amount": amount,
-                "mode": mode,
+                "payment_mode": payment_mode,
                 "description": description
-            }
+                }
+                st.write(electric_expenses_entry)
+                add_electric_expenses_entry(electric_expenses_entry)
 
-    return None
-
+             
+   
 
 def render_electric_expenses():
     st.title("⚡ Electric Expenses")
