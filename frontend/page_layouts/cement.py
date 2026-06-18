@@ -89,8 +89,13 @@ def render_expenses_history():
 
 
 def render_cement_metrics():
-    # 🔢 Example Data (Replace with DB later)
     data = get_cement_expenses_metrics(params=None)
+    # data = {
+    #     'total_spend': 45345,
+    #     'total_purchased' : '45',
+    #     'total_paid' : 4353,
+    #     'outstanding_amount' : 435
+    # }
     # st.write(get_cement_expenses_metrics(params=None))
     data_metrics = {
         "Total Spend" :  f"₹ {data['total_spend']:,}",
