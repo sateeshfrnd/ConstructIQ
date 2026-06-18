@@ -9,11 +9,47 @@ from utils.constants import (
     DATE_FORMAT
 )
 from services.api_client import (
-    add_bricks_expenses_entry,get_bricks_expenses_entry
+    add_bricks_expenses_entry, get_bricks_expenses_entry, get_bricks_expenses_metrics
 )
+from components.metric_cards import render_data_metrics_style3
+
+def sample_data_metrics():
+    return {
+        "total_spend": 145000.0,
+        "total_purchased": 5000,
+        "total_paid": 130000.0,
+        "outstanding_amount": 15000.0,
+        "size_breakdown": {
+            "4-INCH": {"quantity": 3000, "cost": 87000.0},
+            "6-INCH": {"quantity": 2000, "cost": 58000.0}
+        }
+    }
+
+def render_bricks_metrics():
+    data = get_bricks_expenses_metrics(params=None)
+
+    # Row 1: Overall summary metrics
+    summary_metrics = {
+        "Total Spend": f"₹ {data['total_spend']:,.0f}",
+        "Total Bricks": f"{data['total_purchased']:,}",
+        "Total Paid": f"₹ {data['total_paid']:,.0f}",
+        "Outstanding": f"₹ {data['outstanding_amount']:,.0f}"
+    }
+    render_data_metrics_style3(dict_datametrics=summary_metrics)
+
+    # Row 2: Size-wise breakdown
+    size_breakdown = data.get("size_breakdown", {})
+    if size_breakdown:
+        size_metrics = {}
+        for size, info in size_breakdown.items():
+            size_metrics[f"{size} Blocks"] = f"{info['quantity']:,}"
+            size_metrics[f"{size} Cost"] = f"₹ {info['cost']:,.0f}"
+        render_data_metrics_style3(dict_datametrics=size_metrics)
+
+
 def render_add_bricks_entry_form():
     with st.container(border=True):
-        st.subheader("Add Sand Purchase")
+        st.subheader("Add Brick Purchase")
         col1, col2 = st.columns(2)
         with col1:
             purchase_date = st.date_input("Date", key="purchase_date", value='today', format=DATE_FORMAT)
@@ -49,8 +85,6 @@ def render_add_bricks_entry_form():
             payment_mode = st.selectbox("Payment Mode", PAYMENT_MODES)         
         with col2 :            
             payment_amount = st.number_input("Payment Amount", min_value=0.0, value=total_cost)
-
-   
 
 
         if st.button("Add Entry"):
@@ -95,7 +129,8 @@ def render_expenses_history():
 def render_bricks():
     st.title("🧱 Brick Management")
     st.write("Track and manage your brick inventory efficiently. Record purchases, monitor usage across construction stages, and stay on top of your brick consumption.")
- 
+    render_bricks_metrics()
+
     # Add Brick Expense
     render_add_bricks_entry_form()
 

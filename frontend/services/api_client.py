@@ -34,6 +34,9 @@ def add_steel_expenses_entry(entry):
 def get_steel_expenses_entry():
      return requests.get(f"{BASE_URL}/steel_expenses").json()
 
+def get_steel_expenses_metrics(params):
+     return requests.get(f"{BASE_URL}/steel_expenses/metrics", params=params).json()
+
 # bricks Entry
 def add_bricks_expenses_entry(entry):
      return requests.post(f"{BASE_URL}/bricks_expenses", json=entry).json()
@@ -41,12 +44,18 @@ def add_bricks_expenses_entry(entry):
 def get_bricks_expenses_entry():
      return requests.get(f"{BASE_URL}/bricks_expenses").json()
 
+def get_bricks_expenses_metrics(params):
+     return requests.get(f"{BASE_URL}/bricks_expenses/metrics", params=params).json()
+
 # Sand Entry
 def add_sand_expenses_entry(entry):
      return requests.post(f"{BASE_URL}/sand_expenses", json=entry).json()
 
 def get_sand_expenses_entry():
      return requests.get(f"{BASE_URL}/sand_expenses").json()
+
+def get_sand_expenses_metrics(params):
+     return requests.get(f"{BASE_URL}/sand_expenses/metrics", params=params).json()
 
 # Stone Entry
 def add_stone_expenses_entry(entry):
@@ -61,12 +70,18 @@ def add_stone_expenses_entry(entry):
 def get_stone_expenses_entry():
      return requests.get(f"{BASE_URL}/stone_expenses").json()
 
+def get_stone_expenses_metrics(params):
+     return requests.get(f"{BASE_URL}/stone_expenses/metrics", params=params).json()
+
 # Labour Entry
 def add_labour_expenses_entry(entry):
      return requests.post(f"{BASE_URL}/labour_expenses", json=entry).json()
 
 def get_labour_expenses_entry():
      return requests.get(f"{BASE_URL}/labour_expenses").json()
+
+def get_labour_expenses_metrics(params):
+     return requests.get(f"{BASE_URL}/labour_expenses/metrics", params=params).json()
 
 # electric Entry
 def add_electric_expenses_entry(entry):
@@ -75,6 +90,9 @@ def add_electric_expenses_entry(entry):
 def get_electric_expenses_entry():
      return requests.get(f"{BASE_URL}/electric_expenses").json()
 
+def get_electric_expenses_metrics(params):
+     return requests.get(f"{BASE_URL}/electric_expenses/metrics", params=params).json()
+
 # plumbing Entry
 def add_plumbing_expenses_entry(entry):
      return requests.post(f"{BASE_URL}/plumbing_expenses", json=entry).json()
@@ -82,12 +100,18 @@ def add_plumbing_expenses_entry(entry):
 def get_plumbing_expenses_entry():
      return requests.get(f"{BASE_URL}/plumbing_expenses").json()
 
+def get_plumbing_expenses_metrics(params):
+     return requests.get(f"{BASE_URL}/plumbing_expenses/metrics", params=params).json()
+
 # painting Entry
 def add_painting_expenses_entry(entry):
      return requests.post(f"{BASE_URL}/painting_expenses", json=entry).json()
 
 def get_painting_expenses_entry():
      return requests.get(f"{BASE_URL}/painting_expenses").json()
+
+def get_painting_expenses_metrics(params):
+     return requests.get(f"{BASE_URL}/painting_expenses/metrics", params=params).json()
 
 # Site Entry
 def add_site_expenses_entry(entry):
