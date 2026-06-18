@@ -10,7 +10,12 @@ from utils.constants import (
     PAYMENT_MODES
 )
 from services.api_client import (
-add_cement_expenses_entry,get_cement_expenses_entry)
+    add_cement_expenses_entry,
+    get_cement_expenses_entry,
+    get_cement_expenses_metrics
+)
+
+from components.metric_cards import render_data_metrics, render_data_metrics_style2, render_data_metrics_style3
 
 def cement_entry_form():
     with st.container(border=True):
@@ -77,13 +82,34 @@ def render_expenses_history():
     data = get_cement_expenses_entry()
     if data:
         df = pd.DataFrame(data=data)
-        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+        st.dataframe(data=df, width='content',  hide_index=True)
     else:
         st.info("No expenses added yet.")             
 
-def render_cement():
+
+
+def render_cement_metrics():
+    # 🔢 Example Data (Replace with DB later)
+    data = get_cement_expenses_metrics(params=None)
+    # st.write(get_cement_expenses_metrics(params=None))
+    data_metrics = {
+        "Total Spend" :  f"₹ {data['total_spend']:,}",
+        "Total Purchased" : f"{data['total_purchased']} bags",
+        "Total Paid": f"₹ {data['total_paid']:,}",
+        "Outstanding Amount": f"{data['outstanding_amount']:,}"
+    }
+
+    # render_data_metrics(dict_datametrics=data_metrics)    
+    # st.divider()
+    # render_data_metrics_style2(dict_datametrics=data_metrics)
+    # st.divider()
+    render_data_metrics_style3(dict_datametrics=data_metrics)
+
+
+def render_cement():    
     st.title("Cement Management")
     st.write("Track and manage your cement usage effectively. Monitor purchases, consumption in concrete work, and maintain accurate stock levels.")
+    render_cement_metrics()
 
     # Form to add new cement expense entry
     cement_entry_form()   

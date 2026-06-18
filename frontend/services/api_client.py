@@ -16,12 +16,15 @@ def get_headers():
     token = st.session_state.get("token")
     return {"Authorization": f"Bearer {token}"}
 
-# Cement Entry
+# =============== Cement Entry =====================
 def add_cement_expenses_entry(entry):
      return requests.post(f"{BASE_URL}/cement_expenses", json=entry).json()
 
 def get_cement_expenses_entry():
      return requests.get(f"{BASE_URL}/cement_expenses").json()
+
+def get_cement_expenses_metrics(params):
+     return requests.get(f"{BASE_URL}/cement_expenses/metrics", params=params).json()
 
 
 # Steel Entry
