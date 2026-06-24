@@ -9,7 +9,31 @@ from utils.constants import (
 )
 
 from services.api_client import (
-    add_stone_expenses_entry,get_stone_expenses_entry)
+    add_stone_expenses_entry, get_stone_expenses_entry, get_stone_expenses_metrics)
+from components.metric_cards import render_data_metrics_style3
+
+
+def render_stone_metrics():
+    data = get_stone_expenses_metrics(params=None)
+
+    # Row 1: Overall summary
+    summary_metrics = {
+        "Total Spend": f"₹ {data['total_spend']:,.0f}",
+        "Total Loads": f"{data['total_trucks']}",
+        "Total Paid": f"₹ {data['total_paid']:,.0f}",
+        "Outstanding": f"₹ {data['outstanding_amount']:,.0f}"
+    }
+    render_data_metrics_style3(dict_datametrics=summary_metrics)
+
+    # Row 2: Type-wise breakdown (20mm / 40mm / Rocks)
+    type_breakdown = data.get("type_breakdown", {})
+    if type_breakdown:
+        type_metrics = {}
+        for stone_type, info in type_breakdown.items():
+            type_metrics[f"{stone_type} Loads"] = f"{info['loads']}"
+            type_metrics[f"{stone_type} Cost"] = f"₹ {info['cost']:,.0f}"
+        render_data_metrics_style3(dict_datametrics=type_metrics)
+
 
 def render_add_stone_entry_form():
     with st.container(border=True):
@@ -35,7 +59,6 @@ def render_add_stone_entry_form():
         total_amount = (no_of_trucks * cost_per_truck) + driver_amount
         st.metric("Total Amount ", f"₹{total_amount:,.2f}")   
 
-        # 
         col6, col7 = st.columns(2)
         with col6:
             paid_date = st.date_input("Payment Date", key="paid_date",value=date.today(), format=DATE_FORMAT)
@@ -78,27 +101,16 @@ def render_add_stone_entry_form():
                     st.success("Stone entry submitted successfully")
 
 def render_expenses_history():
-    st.subheader("Expense History") 
     data = get_stone_expenses_entry()
-    if data:
-        df = pd.DataFrame(data=data)
-        st.dataframe(data=df, use_container_width=True,  hide_index=True)
-    else:
-        st.info("No expenses added yet.")
+    from components.editable_table import render_editable_history
+    render_editable_history(data, "stone")
 
 def render_stone():
     st.title("🪨 Stone (Jelly) Management")
     st.write("Track and manage your stone materials efficiently. Keep records of purchases, usage in construction, and maintain clear visibility of stock levels.")
+    render_stone_metrics()
     
     render_add_stone_entry_form()
 
     st.divider()
-    # Expense history table (placeholder for now)
-   
     render_expenses_history()
-
-    
-
-   
-
-    

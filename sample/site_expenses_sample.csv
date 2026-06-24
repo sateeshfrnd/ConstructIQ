@@ -1,0 +1,8 @@
+expenses_date,expense_type,expense_category,amount,construction_stage,payment_mode,description,notes
+2024-01-05,Design Consultation,Architect Fee,25000,Foundation,Bank Transfer,Initial house plan consultation,Meeting with architect
+2024-01-08,JCB / Machine Rent,Excavation,18000,Foundation,Cash,Foundation excavation with JCB,3 hours work
+2024-01-10,Soil Removal,Excavation,8000,Foundation,Cash,Excess soil removal from site,2 truck loads
+2024-02-15,RMC Material,Readymix Concrete,45000,Structure-GF,Bank Transfer,M25 grade concrete for slab,12 cubic meters
+2024-02-15,Pumping Charges,Readymix Concrete,8000,Structure-GF,Cash,Concrete pump rent for slab pouring,
+2024-03-01,Processing Fee,Loan Process,15000,Others,Bank Transfer,Home loan processing fee,SBI home loan
+2024-03-20,Small Purchases,Miscellaneous,3500,Structure-I_Floor,Cash,Nails tarpaulin and rope,

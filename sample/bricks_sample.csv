@@ -1,0 +1,6 @@
+purchase_date,construction_stage,vendor_name,brick_size,quantity,price_per_brick,driver_amount,total_amount,payment_amount,payment_mode,payment_date
+2024-01-20,Foundation,SRS ENTERPRISES,4-INCH,2000,29,500,58500,58500,Cash,2024-01-20
+2024-02-01,Structure-GF,SRS ENTERPRISES,6-INCH,1500,35,500,53000,50000,Bank Transfer,2024-02-03
+2024-02-15,Structure-GF,SRS ENTERPRISES,4-INCH,3000,29,600,87600,87600,UPI,2024-02-15
+2024-03-05,Structure-I_Floor,SRS ENTERPRISES,6-INCH,2000,35,500,70500,70500,Cash,2024-03-05
+2024-03-20,Structure-I_Floor,SRS ENTERPRISES,4-INCH,2500,29,500,73000,60000,Bank Transfer,2024-03-22

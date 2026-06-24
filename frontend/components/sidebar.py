@@ -14,18 +14,25 @@ MENU = {
     },
     "Workforce": {
         "General Labour": "labour",
+        "Civil Contract": "civil_contract",
         "Electrical Work": "electrical",
         "Plumbing Work": "plumbing",
         "Painting & Finishing": "painting"
     },
     "Other Expenses" : {
         "Site Expenses": "site_expenses",
+        "Bulk Load": "bulk_load",
     }
 }
 
 # Function to load CSS
+import os
+
 def load_css(file_name):
-    with open(file_name) as f:
+    # Resolve path relative to the app root directory
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    css_path = os.path.join(base_dir, file_name)
+    with open(css_path) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 def render_sidebar():    

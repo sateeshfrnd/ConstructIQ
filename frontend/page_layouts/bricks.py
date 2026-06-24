@@ -26,7 +26,8 @@ def sample_data_metrics():
     }
 
 def render_bricks_metrics():
-    data = get_bricks_expenses_metrics(params=None)
+    # data = get_bricks_expenses_metrics(params=None)
+    data = sample_data_metrics()
 
     # Row 1: Overall summary metrics
     summary_metrics = {

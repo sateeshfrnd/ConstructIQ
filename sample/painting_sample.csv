@@ -1,0 +1,6 @@
+expense_date,category,construction_stage,vendor,amount,mode,description
+2024-05-01,Putty,Finishing,Asian Paints Dealer,12000,Cash,Wall putty for ground floor
+2024-05-08,Primer,Finishing,Asian Paints Dealer,8000,UPI,Primer coat for all walls
+2024-05-15,Paint,Finishing,Asian Paints Dealer,25000,Bank Transfer,Apex Ultima emulsion 2 coats
+2024-05-22,Labor,Finishing,Venkatesh Painters,35000,Cash,Painting labor for full house
+2024-05-28,Tools,Finishing,Local Hardware,3500,Cash,Rollers brushes and masking tape

@@ -1,0 +1,6 @@
+expense_date,construction_stage,category,vendor,amount,payment_mode,description
+2024-02-10,Structure-GF,Temporary EB,BESCOM,5000,Bank Transfer,Temporary electricity connection for construction
+2024-03-05,Structure-GF,Wiring,Sri Electrical Works,12000,Cash,Conduit piping for ground floor
+2024-03-18,Structure-I_Floor,Wiring,Sri Electrical Works,15000,UPI,First floor wiring and conduit
+2024-04-02,Structure-I_Floor,Fittings,Havells Store,8500,Cash,Switches and sockets for first floor
+2024-04-15,Finishing,Labor,Ramesh Electrician,10000,UPI,Wiring labor for two floors

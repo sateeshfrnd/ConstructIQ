@@ -10,18 +10,48 @@ from utils.constants import (
 )
 
 from services.api_client import (
-    add_site_expenses_entry,get_site_expenses_entry)
+    add_site_expenses_entry, get_site_expenses_entry, get_site_expenses_metrics)
+from components.metric_cards import render_data_metrics_style3
+
+def get_sample_data():
+    return {
+            "total_spend": 169500.0,
+            "total_entries": 14,
+            "category_breakdown": {
+                "Architect Fee": {"entries": 3, "cost": 45000.0},
+                "Excavation": {"entries": 2, "cost": 32000.0},
+                "Readymix Concrete": {"entries": 4, "cost": 80000.0},
+                "Miscellaneous": {"entries": 5, "cost": 12500.0}
+            }
+        }
+
+
+def render_site_category_metrics(data):
+    """Render site expenses breakdown vertically grouped by category."""
+    category_breakdown = data.get("category_breakdown", {})
+    with st.container(border=True):
+        st.markdown("**� Expenses by Category**")
+        if category_breakdown:
+            for category, info in category_breakdown.items():
+                st.markdown(f"**{category}**")
+                col_a, col_b = st.columns(2)
+                col_a.metric("Entries", f"{info['entries']}")
+                col_b.metric("Cost", f"₹ {info['cost']:,.0f}")
+                st.divider()
+        else:
+            st.info("No site expenses yet")
+
 
 def render_site_entry_form():
     with st.form("site_form", clear_on_submit=True):
-        st.subheader("Add Site Expenses")
+        st.subheader("Add Site Expense")
 
         col1, col2 = st.columns(2)
 
         with col1:
             expense_date = st.date_input("📅 Expense Date", value=date.today(), format=DATE_FORMAT)
-            category = st.selectbox("⚡ Category",list(MISCELLANEOUS_EXPENSE_CATEGORIES.keys()))
-            stage = st.selectbox("🏗️ Construnction Stage",CONSTRUCTION_STAGES)
+            category = st.selectbox("⚡ Category", list(MISCELLANEOUS_EXPENSE_CATEGORIES.keys()))
+            stage = st.selectbox("🏗️ Construction Stage", CONSTRUCTION_STAGES)
 
         with col2:
             expense_type = st.selectbox("📌 Type", MISCELLANEOUS_EXPENSE_CATEGORIES[category])
@@ -38,7 +68,7 @@ def render_site_entry_form():
             elif not description.strip():
                 st.error("⚠️ Description is required")
             else:
-                site_expenses_entry =  {
+                site_expenses_entry = {
                     "expenses_date": str(expense_date),
                     "expense_category": category,
                     "construction_stage": stage,
@@ -53,22 +83,35 @@ def render_site_entry_form():
 
     return None
 
+
 def render_expenses_history():
-    st.subheader("Expense History") 
     data = get_site_expenses_entry()
-    if data:
-        df = pd.DataFrame(data=data)
-        st.dataframe(data=df, use_container_width=True,  hide_index=True)
-    else:
-        st.info("No expenses added yet.")
+    from components.editable_table import render_editable_history
+    render_editable_history(data, "site_expenses")
+
 
 def render_site_expenses():
-    st.title("📦 Site Expenses Entry ")
+    st.title("📦 Site Expenses")
     st.caption("Track all your construction-related miscellaneous and setup expenses in one place.")
-    
-    # Add Labour Entry Form
-    render_site_entry_form()
+
+    # Row 1: Overall summary across full width
+    data = get_site_expenses_metrics(params=None)
+    summary_metrics = {
+        "Total Spend": f"₹ {data['total_spend']:,.0f}",
+        "Total Entries": f"{data['total_entries']}",
+    }
+    render_data_metrics_style3(dict_datametrics=summary_metrics)
+
+    st.write("")
+
+    # Side-by-side: Entry Form (left) | Category Metrics (right)
+    left_col, right_col = st.columns([3, 2])
+
+    with left_col:
+        render_site_entry_form()
+
+    with right_col:
+        render_site_category_metrics(data)
 
     st.divider()
-    # Expense history table (placeholder for now)
     render_expenses_history()

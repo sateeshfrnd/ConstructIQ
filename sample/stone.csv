@@ -1,0 +1,6 @@
+delivery_date,construction_stage,vendor_name,stone_type,cost_per_truck,no_of_trucks,driver_amount,total_amount,payment_amount,payment_mode,payment_date
+2024-01-18,Foundation,VISWANATHA SAND SUPPLIERS,40mm,15000,3,500,45500,45500,Cash,2024-01-18
+2024-02-10,Foundation,VISWANATHA SAND SUPPLIERS,20mm,12500,2,0,25000,25000,Bank Transfer,2024-02-11
+2024-02-28,Structure-GF,VISWANATHA SAND SUPPLIERS,40mm,15000,2,500,30500,30500,UPI,2024-02-28
+2024-03-18,Structure-GF,VISWANATHA SAND SUPPLIERS,Rocks,10000,4,0,40000,35000,Cash,2024-03-20
+2024-04-05,Structure-I_Floor,VISWANATHA SAND SUPPLIERS,20mm,12500,3,500,38000,38000,Bank Transfer,2024-04-06

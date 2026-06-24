@@ -1,0 +1,7 @@
+payment_date,construction_stage,labour_type,paid_to,description,reference,payment_amount,payment_mode
+2024-01-14,Foundation,Civil,Raju,Foundation digging and leveling,,15000,Cash
+2024-01-21,Foundation,Steel Bending,Suresh,Rebar bending for footings,TXN001,12000,UPI
+2024-02-05,Structure-GF,Concrete Gang,Kumar Group,Ground floor slab pouring,,25000,Cash
+2024-02-15,Structure-GF,Civil,Raju,Brick masonry ground floor,,18000,Bank Transfer
+2024-03-01,Structure-I_Floor,Steel Bending,Suresh,Column and beam reinforcement,TXN005,20000,UPI
+2024-03-12,Structure-I_Floor,Others,Nagaraj,Centering and scaffolding work,,8000,Cash

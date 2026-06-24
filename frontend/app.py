@@ -13,6 +13,8 @@ from page_layouts.electric import render_electric_expenses
 from page_layouts.plumbing import render_plumbing_expenses
 from page_layouts.painting import render_painting_expenses
 from page_layouts.site_expenses import render_site_expenses
+from page_layouts.bulk_load import render_bulk_load
+from page_layouts.civil_contract import render_civil_contract
 
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
@@ -60,3 +62,9 @@ elif menu == "painting":
 
 elif menu == "site_expenses":
     render_site_expenses()
+
+elif menu == "bulk_load":
+    render_bulk_load()
+
+elif menu == "civil_contract":
+    render_civil_contract()

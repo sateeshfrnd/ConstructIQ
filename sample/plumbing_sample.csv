@@ -1,0 +1,6 @@
+expense_date,category,construction_stage,vendor,amount,payment_mode,description
+2024-02-20,Pipes,Structure-GF,Sri Plumbing Works,18000,Cash,PVC pipes for ground floor drainage
+2024-03-01,Fittings,Structure-GF,Finolex Store,7500,UPI,Elbow joints and T-joints
+2024-03-15,Sanitary,Structure-I_Floor,Hindware Dealer,35000,Bank Transfer,Wash basin and commode for first floor
+2024-04-01,Water Tank,Structure-I_Floor,Sintex Dealer,12000,Cash,1000L overhead water tank
+2024-04-10,Labor,Finishing,Prakash Plumber,15000,UPI,Plumbing installation labor
