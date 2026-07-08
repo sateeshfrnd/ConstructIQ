@@ -6,13 +6,14 @@ from utils.constants import (
     CONSTRUCTION_STAGES,
     DEFAULT_SAND_VENDOR,
     SAND_TYPES_COST,
-    DATE_FORMAT
+    DATE_FORMAT,
+    SIMULATE_METRICS_SAMPLE_DATA
 )
 from services.api_client import (
     add_sand_expenses_entry, get_sand_expenses_entry, get_sand_expenses_metrics)
 from components.metric_cards import render_data_metrics_style3
 
-def sample_data():
+def sample_data_metrics():
     return {
         "total_spend": 139500.0,
         "total_trucks": 8,
@@ -102,6 +103,8 @@ def render_add_sand_entry_form():
 
 def render_expenses_history():
     data = get_sand_expenses_entry()
+    # data = sample_data()
+    st.write(data)
     from components.editable_table import render_editable_history
     render_editable_history(data, "sand")
 
@@ -111,14 +114,22 @@ def render_sand():
     st.write("Track and manage your sand usage seamlessly. Record deliveries, monitor consumption, and ensure optimal material availability for construction.")
 
     # Row 1: Overall summary across full width
-    data = get_sand_expenses_metrics(params=None)
-    summary_metrics = {
-        "Total Spend": f"₹ {data['total_spend']:,.0f}",
-        "Total Loads": f"{data['total_trucks']}",
-        "Total Paid": f"₹ {data['total_paid']:,.0f}",
-        "Outstanding": f"₹ {data['outstanding_amount']:,.0f}"
-    }
-    render_data_metrics_style3(dict_datametrics=summary_metrics)
+    if SIMULATE_METRICS_SAMPLE_DATA:
+        data = sample_data_metrics()
+    else:
+        data = get_sand_expenses_metrics(params=None)
+        if isinstance(data, dict) and data.get("detail") == "Not Found":
+            st.info("No sand expense metrics available yet.")
+        elif isinstance(data, dict) and data.get("error"):
+            st.error(data["error"])
+        else:
+            summary_metrics = {
+                "Total Spend": f"₹ {data['total_spend']:,.0f}",
+                "Total Loads": f"{data['total_trucks']}",
+                "Total Paid": f"₹ {data['total_paid']:,.0f}",
+                "Outstanding": f"₹ {data['outstanding_amount']:,.0f}"
+            }
+            render_data_metrics_style3(dict_datametrics=summary_metrics)
 
     st.write("")
 

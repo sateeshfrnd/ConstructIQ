@@ -5,13 +5,14 @@ from datetime import datetime
 from utils.constants import (
     CONSTRUCTION_STAGES,
     DATE_FORMAT,
-    LABOUR_TYPE
+    LABOUR_TYPE,
+    SIMULATE_METRICS_SAMPLE_DATA
 )
 from services.api_client import (
     add_labour_expenses_entry, get_labour_expenses_entry, get_labour_expenses_metrics)
 from components.metric_cards import render_data_metrics_style3
 
-def sample_data():
+def sample_data_metrics():
     return {
         "total_paid": 270000.0,
         "total_entries": 18,
@@ -86,14 +87,22 @@ def render_labour():
     st.write("Track and manage your labour costs effectively. Add new labour entries, view expense history, and gain insights into your labour expenses.")
 
     # Row 1: Overall summary across full width
-    data = get_labour_expenses_metrics(params=None)
-    summary_metrics = {
-        "Total Paid": f"₹ {data['total_paid']:,.0f}",
-        "Total Entries": f"{data['total_entries']}",
-    }
-    render_data_metrics_style3(dict_datametrics=summary_metrics)
+    if SIMULATE_METRICS_SAMPLE_DATA:
+        data = sample_data_metrics()
+    else:
+        data = get_labour_expenses_metrics(params=None)
+        if isinstance(data, dict) and data.get("detail") == "Not Found":
+            st.info("No labour expense metrics available yet.")
+        elif isinstance(data, dict) and data.get("error"):
+            st.error(data["error"])
+        else:
+            summary_metrics = {
+                "Total Paid": f"₹ {data['total_paid']:,.0f}",
+                "Total Entries": f"{data['total_entries']}",
+            }
+            render_data_metrics_style3(dict_datametrics=summary_metrics)
 
-    st.write("")
+        st.write("")
 
     # Side-by-side: Entry Form (left) | Type Metrics (right)
     left_col, right_col = st.columns([3, 2])

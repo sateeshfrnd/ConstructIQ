@@ -7,7 +7,8 @@ from utils.constants import (
     DEFAULT_CEMENT_COMPANY, 
     DEFAULT_CEMENT_COST_PER_BAG,
     DATE_FORMAT,
-    PAYMENT_MODES
+    PAYMENT_MODES,
+    SIMULATE_METRICS_SAMPLE_DATA
 )
 from services.api_client import (
     add_cement_expenses_entry,
@@ -86,29 +87,37 @@ def render_expenses_history():
     else:
         st.info("No expenses added yet.")             
 
-
-
-def render_cement_metrics():
-    data = get_cement_expenses_metrics(params=None)
-    # data = {
-    #     'total_spend': 45345,
-    #     'total_purchased' : '45',
-    #     'total_paid' : 4353,
-    #     'outstanding_amount' : 435
-    # }
-    # st.write(get_cement_expenses_metrics(params=None))
-    data_metrics = {
-        "Total Spend" :  f"₹ {data['total_spend']:,}",
-        "Total Purchased" : f"{data['total_purchased']} bags",
-        "Total Paid": f"₹ {data['total_paid']:,}",
-        "Outstanding Amount": f"{data['outstanding_amount']:,}"
+def sample_data_metrics():
+    return {
+        'total_spend': 45345,
+        'total_purchased' : '45',
+        'total_paid' : 4353,
+        'outstanding_amount' : 435
     }
 
-    # render_data_metrics(dict_datametrics=data_metrics)    
-    # st.divider()
-    # render_data_metrics_style2(dict_datametrics=data_metrics)
-    # st.divider()
-    render_data_metrics_style3(dict_datametrics=data_metrics)
+def render_cement_metrics():
+    if SIMULATE_METRICS_SAMPLE_DATA:
+        data = sample_data_metrics()
+    else:
+        data = get_cement_expenses_metrics(params=None)
+        if isinstance(data, dict) and data.get("detail") == "Not Found":
+            st.info("No cement expense metrics available yet.")
+        elif isinstance(data, dict) and data.get("error"):
+            st.error(data["error"])
+        else:    
+            # st.write(get_cement_expenses_metrics(params=None))
+            summary_metrics = {
+                "Total Spend" :  f"₹ {data['total_spend']:,}",
+                "Total Purchased" : f"{data['total_purchased']} bags",
+                "Total Paid": f"₹ {data['total_paid']:,}",
+                "Outstanding Amount": f"{data['outstanding_amount']:,}"
+            }
+
+            # render_data_metrics(dict_datametrics=data_metrics)    
+            # st.divider()
+            # render_data_metrics_style2(dict_datametrics=data_metrics)
+            # st.divider()
+            render_data_metrics_style3(dict_datametrics=summary_metrics)
 
 
 def render_cement():    

@@ -6,7 +6,8 @@ from utils.constants import (
     DEFAULT_BRICK_VENDOR,
     PAYMENT_MODES,
     BRICK_SIZE_COST,
-    DATE_FORMAT
+    DATE_FORMAT,
+    SIMULATE_METRICS_SAMPLE_DATA
 )
 from services.api_client import (
     add_bricks_expenses_entry, get_bricks_expenses_entry, get_bricks_expenses_metrics
@@ -26,17 +27,23 @@ def sample_data_metrics():
     }
 
 def render_bricks_metrics():
-    # data = get_bricks_expenses_metrics(params=None)
-    data = sample_data_metrics()
-
-    # Row 1: Overall summary metrics
-    summary_metrics = {
-        "Total Spend": f"₹ {data['total_spend']:,.0f}",
-        "Total Bricks": f"{data['total_purchased']:,}",
-        "Total Paid": f"₹ {data['total_paid']:,.0f}",
-        "Outstanding": f"₹ {data['outstanding_amount']:,.0f}"
-    }
-    render_data_metrics_style3(dict_datametrics=summary_metrics)
+    if SIMULATE_METRICS_SAMPLE_DATA:
+        data = sample_data_metrics()
+    else:
+        data = get_bricks_expenses_metrics(params=None)
+        if isinstance(data, dict) and data.get("detail") == "Not Found":
+            st.info("No bricks expense metrics available yet.")
+        elif isinstance(data, dict) and data.get("error"):
+            st.error(data["error"])
+        else:
+            # Row 1: Overall summary metrics
+            summary_metrics = {
+                "Total Spend": f"₹ {data['total_spend']:,.0f}",
+                "Total Bricks": f"{data['total_purchased']:,}",
+                "Total Paid": f"₹ {data['total_paid']:,.0f}",
+                "Outstanding": f"₹ {data['outstanding_amount']:,.0f}"
+            }
+            render_data_metrics_style3(dict_datametrics=summary_metrics)
 
     # Row 2: Size-wise breakdown
     size_breakdown = data.get("size_breakdown", {})
@@ -123,7 +130,7 @@ def render_expenses_history():
     data = get_bricks_expenses_entry()
     if data:
         df = pd.DataFrame(data=data)
-        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+        st.dataframe(data=df, width="stretch",  hide_index=True)
     else:
         st.info("No expenses added yet.")                
 

@@ -6,13 +6,14 @@ from utils.constants import (
     DATE_FORMAT,
     CONSTRUCTION_STAGES,
     PAYMENT_MODES,
-    PLUMBING_CATEGORY
+    PLUMBING_CATEGORY,
+    SIMULATE_METRICS_SAMPLE_DATA
 )
 from services.api_client import (
     add_plumbing_expenses_entry, get_plumbing_expenses_entry, get_plumbing_expenses_metrics)
 from components.metric_cards import render_data_metrics_style3
 
-def sample_data():
+def sample_data_metrics():
     return {
         "total_spend": 103000.0,
         "total_entries": 12,
@@ -87,12 +88,20 @@ def render_plumbing_expenses():
     )
 
     # Row 1: Overall summary across full width
-    data = get_plumbing_expenses_metrics(params=None)
-    summary_metrics = {
-        "Total Spend": f"₹ {data['total_spend']:,.0f}",
-        "Total Entries": f"{data['total_entries']}",
-    }
-    render_data_metrics_style3(dict_datametrics=summary_metrics)
+    if SIMULATE_METRICS_SAMPLE_DATA:
+        data = sample_data_metrics()
+    else:
+        data = get_plumbing_expenses_metrics(params=None)
+        if isinstance(data, dict) and data.get("detail") == "Not Found":
+            st.info("No bricks expense metrics available yet.")
+        elif isinstance(data, dict) and data.get("error"):
+            st.error(data["error"])
+        else:
+            summary_metrics = {
+                "Total Spend": f"₹ {data['total_spend']:,.0f}",
+                "Total Entries": f"{data['total_entries']}",
+            }
+            render_data_metrics_style3(dict_datametrics=summary_metrics)
 
     st.write("")
 

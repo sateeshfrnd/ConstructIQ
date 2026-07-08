@@ -6,14 +6,15 @@ from utils.constants import (
     DATE_FORMAT,
     CONSTRUCTION_STAGES,
     PAYMENT_MODES,
-    ELECTRIC_CATEGORY
+    ELECTRIC_CATEGORY,
+    SIMULATE_METRICS_SAMPLE_DATA
 )
 from services.api_client import (
     add_electric_expenses_entry, get_electric_expenses_entry, get_electric_expenses_metrics)
 from components.metric_cards import render_data_metrics_style3
 
 
-def sample_data():
+def sample_data_metrics():
     return {
         "total_spend": 63000.0,
         "total_entries": 10,
@@ -88,12 +89,21 @@ def render_electric_expenses():
     st.write("Track electrical costs during construction—from wiring and fittings to temporary power and labor—with clear visibility into your expenses.")
 
     # Row 1: Overall summary across full width
-    data = get_electric_expenses_metrics(params=None)
-    summary_metrics = {
-        "Total Spend": f"₹ {data['total_spend']:,.0f}",
-        "Total Entries": f"{data['total_entries']}",
-    }
-    render_data_metrics_style3(dict_datametrics=summary_metrics)
+    if SIMULATE_METRICS_SAMPLE_DATA:
+        data = sample_data_metrics()
+    else:
+        data = get_electric_expenses_metrics(params=None)
+        if isinstance(data, dict) and data.get("detail") == "Not Found":
+            st.info("No electric expense metrics available yet.")
+        elif isinstance(data, dict) and data.get("error"):
+            st.error(data["error"])
+        else:
+            # (params=None)
+            summary_metrics = {
+                "Total Spend": f"₹ {data['total_spend']:,.0f}",
+                "Total Entries": f"{data['total_entries']}",
+            }
+            render_data_metrics_style3(dict_datametrics=summary_metrics)
 
     st.write("")
 

@@ -101,7 +101,7 @@ def render_bulk_load():
     # Step 5: Preview data
     st.subheader("📊 Data Preview")
     st.write(f"**{len(df)} records** found in the file")
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    st.dataframe(df, width="stretch", hide_index=True)
 
     st.divider()
 

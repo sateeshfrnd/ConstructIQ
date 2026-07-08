@@ -6,13 +6,14 @@ from utils.constants import (
     DATE_FORMAT,
     CONSTRUCTION_STAGES,
     PAYMENT_MODES,
-    PAINTING_CATEGORY
+    PAINTING_CATEGORY,
+    SIMULATE_METRICS_SAMPLE_DATA
 )
 from services.api_client import (
     add_painting_expenses_entry, get_painting_expenses_entry, get_painting_expenses_metrics)
 from components.metric_cards import render_data_metrics_style3
 
-def get_sampledata():
+def sample_data_metrics():
     return {
         "total_spend": 110000.0,
         "total_entries": 9,
@@ -87,12 +88,20 @@ def render_painting_expenses():
     )
 
     # Row 1: Overall summary across full width
-    data = get_painting_expenses_metrics(params=None)
-    summary_metrics = {
-        "Total Spend": f"₹ {data['total_spend']:,.0f}",
-        "Total Entries": f"{data['total_entries']}",
-    }
-    render_data_metrics_style3(dict_datametrics=summary_metrics)
+    if SIMULATE_METRICS_SAMPLE_DATA:
+        data = sample_data_metrics()
+    else:
+        data = get_painting_expenses_metrics(params=None)
+        if isinstance(data, dict) and data.get("detail") == "Not Found":
+            st.info("No painting expense metrics available yet.")
+        elif isinstance(data, dict) and data.get("error"):
+            st.error(data["error"])
+        else:
+            summary_metrics = {
+                "Total Spend": f"₹ {data['total_spend']:,.0f}",
+                "Total Entries": f"{data['total_entries']}",
+            }
+            render_data_metrics_style3(dict_datametrics=summary_metrics)
 
     st.write("")
 

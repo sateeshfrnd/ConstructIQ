@@ -6,14 +6,15 @@ from utils.constants import (
     DATE_FORMAT,
     CONSTRUCTION_STAGES,
     PAYMENT_MODES,
-    MISCELLANEOUS_EXPENSE_CATEGORIES
+    MISCELLANEOUS_EXPENSE_CATEGORIES,
+    SIMULATE_METRICS_SAMPLE_DATA
 )
 
 from services.api_client import (
     add_site_expenses_entry, get_site_expenses_entry, get_site_expenses_metrics)
 from components.metric_cards import render_data_metrics_style3
 
-def get_sample_data():
+def sample_data_metrics():
     return {
             "total_spend": 169500.0,
             "total_entries": 14,
@@ -95,12 +96,20 @@ def render_site_expenses():
     st.caption("Track all your construction-related miscellaneous and setup expenses in one place.")
 
     # Row 1: Overall summary across full width
-    data = get_site_expenses_metrics(params=None)
-    summary_metrics = {
-        "Total Spend": f"₹ {data['total_spend']:,.0f}",
-        "Total Entries": f"{data['total_entries']}",
-    }
-    render_data_metrics_style3(dict_datametrics=summary_metrics)
+    if SIMULATE_METRICS_SAMPLE_DATA:
+        data = sample_data_metrics()
+    else:
+        data = get_site_expenses_metrics(params=None)
+        if isinstance(data, dict) and data.get("detail") == "Not Found":
+            st.info("No bricks expense metrics available yet.")
+        elif isinstance(data, dict) and data.get("error"):
+            st.error(data["error"])
+        else:
+            summary_metrics = {
+                "Total Spend": f"₹ {data['total_spend']:,.0f}",
+                "Total Entries": f"{data['total_entries']}",
+            }
+            render_data_metrics_style3(dict_datametrics=summary_metrics)
 
     st.write("")
 

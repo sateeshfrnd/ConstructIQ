@@ -108,7 +108,7 @@ def render_expenses_history():
 def render_stone():
     st.title("🪨 Stone (Jelly) Management")
     st.write("Track and manage your stone materials efficiently. Keep records of purchases, usage in construction, and maintain clear visibility of stock levels.")
-    render_stone_metrics()
+    # render_stone_metrics()
     
     render_add_stone_entry_form()
 

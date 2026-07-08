@@ -11,6 +11,7 @@ from utils.constants import (
     DEFAULT_STEEL_COST_PER_KG,
     DEFAULT_BINDING_WIRE_COST_PER_BUNDLE,
     DATE_FORMAT,
+    SIMULATE_METRICS_SAMPLE_DATA
 )
 from services.api_client import (
     add_steel_expenses_entry, get_steel_expenses_entry, get_steel_expenses_metrics)

@@ -150,7 +150,7 @@ def render_contract_dashboard(contract_id):
         if payments:
             pay_df = pd.DataFrame(payments)
             pay_df = pay_df.drop(columns=["contract_id"], errors="ignore")
-            st.dataframe(pay_df, use_container_width=True, hide_index=True)
+            st.dataframe(pay_df, width="stretch", hide_index=True)
             st.metric("Total Payments", f"₹ {summary['total_paid']:,.0f}")
         else:
             st.info("No payments recorded yet")

@@ -60,7 +60,7 @@ def render_dashboard():
                 display_df["Total Amount"] = display_df["Total Amount"].apply(lambda x: f"₹ {x:,.0f}")
                 display_df["Total Paid"] = display_df["Total Paid"].apply(lambda x: f"₹ {x:,.0f}")
                 display_df["Outstanding"] = display_df["Outstanding"].apply(lambda x: f"₹ {x:,.0f}")
-                st.dataframe(display_df, use_container_width=True, hide_index=True)
+                st.dataframe(display_df, width="stretch", hide_index=True)
     else:
         st.info("No expense data available yet. Start adding entries!")
 

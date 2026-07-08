@@ -84,3 +84,5 @@ MISCELLANEOUS_EXPENSE_CATEGORIES = {
             "Small Purchases", "Unexpected Expenses", "Repairs", "Tips / Support Payments", "Other"
         ]
     }
+
+SIMULATE_METRICS_SAMPLE_DATA = True
