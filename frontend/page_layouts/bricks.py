@@ -13,6 +13,7 @@ from services.api_client import (
     add_bricks_expenses_entry, get_bricks_expenses_entry, get_bricks_expenses_metrics
 )
 from components.metric_cards import render_data_metrics_style3
+from components.editable_table import render_editable_history
 
 def sample_data_metrics():
     return {
@@ -126,13 +127,14 @@ def render_add_bricks_entry_form():
                 add_bricks_expenses_entry(bricks_entry)
 
 def render_expenses_history():
-    st.subheader("Expense History") 
     data = get_bricks_expenses_entry()
     if data:
-        df = pd.DataFrame(data=data)
-        st.dataframe(data=df, width="stretch",  hide_index=True)
+        # df = pd.DataFrame(data=data)
+        # st.dataframe(data=df, width="stretch",  hide_index=True)
+        render_editable_history(data, "bricks")
     else:
-        st.info("No expenses added yet.")                
+        st.info("No expenses added yet.")    
+                
 
 def render_bricks():
     st.title("🧱 Brick Management")

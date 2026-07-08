@@ -31,7 +31,7 @@ def render_editable_history(data, category_key, title="Expense History"):
         return
 
     # Display table with action buttons
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    st.dataframe(df, width="stretch", hide_index=False)
 
     st.write("")
     st.caption("Select an entry to edit or delete:")

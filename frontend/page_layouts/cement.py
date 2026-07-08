@@ -17,6 +17,7 @@ from services.api_client import (
 )
 
 from components.metric_cards import render_data_metrics, render_data_metrics_style2, render_data_metrics_style3
+from components.editable_table import render_editable_history
 
 def cement_entry_form():
     with st.container(border=True):
@@ -79,11 +80,11 @@ def cement_entry_form():
                 add_cement_expenses_entry(cement_expenses_entry)
  
 def render_expenses_history():
-    st.subheader("Expense History") 
     data = get_cement_expenses_entry()
     if data:
-        df = pd.DataFrame(data=data)
-        st.dataframe(data=df, width='content',  hide_index=True)
+        # df = pd.DataFrame(data=data)
+        # st.dataframe(data=df, width='content',  hide_index=True)
+        render_editable_history(data, "cement") 
     else:
         st.info("No expenses added yet.")             
 

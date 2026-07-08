@@ -61,13 +61,13 @@ def render_sidebar():
     for section, items in MENU.items():
         with st.sidebar.expander(section, expanded=(section == "📊 Overview")):
             for item, key in items.items():
-                if st.button(item, use_container_width=True):
+                if st.button(item, width="stretch"):
                     st.session_state.menu = key
 
     st.sidebar.divider()
 
     # Logout
-    if st.sidebar.button("Logout", use_container_width=True):
+    if st.sidebar.button("Logout", width="stretch"):
         logout_and_redirect()
     
     return st.session_state.menu   

@@ -176,7 +176,7 @@ def render_expenses_history():
     data = get_steel_expenses_entry()
     if data:
         df = pd.DataFrame(data=data)
-        st.dataframe(data=df, use_container_width=True,  hide_index=True)
+        st.dataframe(data=df,width="stretch",  hide_index=True)
     else:
         st.info("No expenses added yet.")  
 
